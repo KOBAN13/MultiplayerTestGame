@@ -30,9 +30,44 @@ MonoBehaviour:
       m_SubObjectGUID: 
       m_SubObjectType: 
       m_EditorAssetChanged: 0
-  - type: 
+  - type: UI.View.AuthorizationErrorScreen
     asset:
-      m_AssetGUID: 
+      m_AssetGUID: 1cdfdd21f37a39d4bbcb7c3f89b46464
+      m_SubObjectName: 
+      m_SubObjectGUID: 
+      m_SubObjectType: 
+      m_EditorAssetChanged: 0
+  - type: UI.View.ConnectionErrorScreen
+    asset:
+      m_AssetGUID: 19c257f330a0c514c9c4d35166217e7e
+      m_SubObjectName: 
+      m_SubObjectGUID: 
+      m_SubObjectType: 
+      m_EditorAssetChanged: 0
+  - type: UI.View.LoginScreen
+    asset:
+      m_AssetGUID: effc72344dd37dc45bbfa1b343a7f70b
+      m_SubObjectName: 
+      m_SubObjectGUID: 
+      m_SubObjectType: 
+      m_EditorAssetChanged: 0
+  - type: UI.View.MainMenuScreen
+    asset:
+      m_AssetGUID: 3dc26993e95af8d47816639a496cb87e
+      m_SubObjectName: 
+      m_SubObjectGUID: 
+      m_SubObjectType: 
+      m_EditorAssetChanged: 0
+  - type: UI.View.RestorePasswordScreen
+    asset:
+      m_AssetGUID: 9388ba59b63b3b24685da92574fed751
+      m_SubObjectName: 
+      m_SubObjectGUID: 
+      m_SubObjectType: 
+      m_EditorAssetChanged: 0
+  - type: UI.View.SignInScreen
+    asset:
+      m_AssetGUID: effc72344dd37dc45bbfa1b343a7f70b
       m_SubObjectName: 
       m_SubObjectGUID: 
       m_SubObjectType: 

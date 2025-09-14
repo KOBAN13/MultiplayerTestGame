@@ -50,6 +50,12 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8883f83b6369e21499e61433a91c7e02
+    m_Address: Assets/Configs/ScreensConfig.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - config
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 9388ba59b63b3b24685da92574fed751
     m_Address: Assets/Prefabs/Screens/RestorePasswordScreen.prefab
     m_ReadOnly: 0
