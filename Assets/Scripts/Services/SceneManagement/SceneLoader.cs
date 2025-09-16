@@ -23,8 +23,8 @@ namespace Services.SceneManagement
         private readonly ReactiveProperty<float> _progress = new();
         private readonly LoadingProgress _loadingProgress = new();
         
-        public Observable<bool> IsLoading => _isLoading;
-        public Observable<float> FillAmount => _progress;
+        public ReadOnlyReactiveProperty<bool> IsLoading => _isLoading;
+        public ReadOnlyReactiveProperty<float> FillAmount => _progress;
         
         [Inject]
         private void Construct(SceneResources sceneResources, IScenesService scenesService, IScreenService screenService)
@@ -54,7 +54,7 @@ namespace Services.SceneManagement
             if(_isLoading.Value == false) 
                 return;
 
-            var currentFillAmount = FillAmount.Value;
+            var currentFillAmount = FillAmount.CurrentValue;
             var progressDifference = Mathf.Abs(currentFillAmount - _targetProgress);
             var dynamicFillSpeed = progressDifference * _fillSpeed;
 

@@ -32,7 +32,7 @@ namespace ClientsScripts
 
         private void Start()
         {
-            //_buttonConnect.OnClickAsObservable.Subscribe(Connection);
+            _buttonConnect.OnClickAsObservable().Subscribe(_ => Connection().Forget());
         }
 
         private void Update()
