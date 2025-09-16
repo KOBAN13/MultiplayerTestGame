@@ -1,7 +1,7 @@
 using Helpers;
 using Services.SceneManagement;
 using UI.Base;
-using UniRx;
+using R3;
 using VContainer;
 
 namespace UI.ViewModel

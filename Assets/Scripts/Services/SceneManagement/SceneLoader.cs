@@ -1,7 +1,8 @@
 ﻿using Cysharp.Threading.Tasks;
-using SceneManagment;
+using R3;
+using Services.Interface;
 using Services.SceneManagement.Enums;
-using UniRx;
+using UI.View;
 using UnityEngine;
 using VContainer;
 
@@ -14,30 +15,38 @@ namespace Services.SceneManagement
         [SerializeField] private float _minSlider = 0.05f;
         [SerializeField] private float _fillSpeed = 0.5f;
 
-        private ScreenService _screenService;
+        private IScenesService _scenesService;
+        private IScreenService _screenService;
         private float _targetProgress;
         
         private readonly ReactiveProperty<bool> _isLoading = new();
         private readonly ReactiveProperty<float> _progress = new();
+        private readonly LoadingProgress _loadingProgress = new();
         
-        public IReadOnlyReactiveProperty<bool> IsLoading => _isLoading;
-        public IReadOnlyReactiveProperty<float> FillAmount => _progress;
+        public Observable<bool> IsLoading => _isLoading;
+        public Observable<float> FillAmount => _progress;
         
         [Inject]
-        private void Construct(SceneResources sceneResources, ScreenService screenService)
+        private void Construct(SceneResources sceneResources, IScenesService scenesService, IScreenService screenService)
         {
+            _scenesService = scenesService;
             _screenService = screenService;
-            _screenService.Construct(sceneResources);
+            _scenesService.Construct(sceneResources);
         }
         
         public async UniTask LoadScene(TypeScene typeScene)
         {
             ChangeParameters();
-            LoadingProgress loadingProgress = new LoadingProgress();
-            loadingProgress.Progressed += value => _targetProgress = Mathf.Max(value, _targetProgress);
+            _screenService.OpenLoading<LoadingScreen>();
+            _loadingProgress.Progressed += value => _targetProgress = Mathf.Max(value, _targetProgress);
             _isLoading.Value = true;
-            await _screenService.LoadScene(_sceneGroup, loadingProgress, typeScene);
+            await _scenesService.LoadScene(_sceneGroup, _loadingProgress, typeScene);
             _isLoading.Value = false;
+        }
+        
+        private void OnEnable()
+        {
+            _scenesService.SceneIsLoad.Subscribe(_ => _screenService.Close());
         }
 
         private void Update()

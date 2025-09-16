@@ -6,7 +6,7 @@ using Sfs2X;
 using Sfs2X.Core;
 using Sfs2X.Entities.Data;
 using Sfs2X.Util;
-using UniRx;
+using R3;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
@@ -32,7 +32,7 @@ namespace ClientsScripts
 
         private void Start()
         {
-            _buttonConnect.OnClickAsObservable().Subscribe(_ => Connection().Forget()).AddTo(this);
+            //_buttonConnect.OnClickAsObservable.Subscribe(Connection);
         }
 
         private void Update()

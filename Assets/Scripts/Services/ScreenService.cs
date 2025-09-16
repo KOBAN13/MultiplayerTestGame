@@ -29,7 +29,6 @@ namespace Services
                 return (TScreen)screen;
             }
             
-            OpenLoading<LoadingScreen>();
             var newScreen = await _screensFactory.CreateAsync<TScreen>();
             CloseLoading();
             

@@ -5,11 +5,11 @@ namespace Services.SceneManagement
     public class LoadingProgress : IProgress<float>
     {
         public event Action<float> Progressed;
-        private float ratio = 1f;
+        private readonly float _ratio = 1f;
         
         public void Report(float value)
         {
-            Progressed?.Invoke(value / ratio);
+            Progressed?.Invoke(value / _ratio);
         }
     }
 }

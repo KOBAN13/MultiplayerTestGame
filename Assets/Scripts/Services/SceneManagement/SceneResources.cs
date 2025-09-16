@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace SceneManagment
+namespace Services.SceneManagement
 {
     public class SceneResources
     {
-        private List<Action> _objectsToRelease = new();
+        private readonly List<Action> _objectsToRelease = new();
         public IReadOnlyList<Action> ObjectToRelease => _objectsToRelease;
 
         public void AddToListDelegate(Action action) => _objectsToRelease.Add(action);

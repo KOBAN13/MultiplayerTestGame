@@ -1,5 +1,7 @@
 ﻿using System.Linq;
 using Factories;
+using Services;
+using Services.Interface;
 using Services.SceneManagement;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
@@ -43,8 +45,10 @@ namespace Di
 
         private void RegisterServices()
         {
-            Register<ScreenService>();
+            Register<SceneResources>();
+            Register<SceneService>();
             RegisterInstance(_sceneLoader);
+            Register<ScreenService>();
         }
     }
 }
