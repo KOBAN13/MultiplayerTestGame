@@ -9,7 +9,7 @@ namespace Services.Interface
     public interface IScenesService
     {
         UniTask LoadScene(SceneGroup sceneGroup, IProgress<float> progress, TypeScene typeScene);
-        void Construct(SceneResources resources);
+        void Construct(SceneLoader loader, SceneResources resources);
         Observable<Unit> SceneIsLoad { get; }
     }
 }

@@ -15,14 +15,16 @@ namespace Services.SceneManagement
     public class SceneService : IScenesService
     {
         private SceneResources _resources;
+        private SceneLoader _sceneLoader;
         private AsyncOperationHandle<SceneInstance> _previousScene;
         private readonly Subject<Unit> _sceneIsLoadSubject = new();
         public Observable<Unit> SceneIsLoad => _sceneIsLoadSubject;
         
 
-        public void Construct(SceneResources resources)
+        public void Construct(SceneLoader sceneLoader, SceneResources resources)
         {
             _resources = resources;
+            _sceneLoader = sceneLoader;
         }
         
         public async UniTask LoadScene(SceneGroup sceneGroup, IProgress<float> progress, TypeScene typeScene)
@@ -33,14 +35,14 @@ namespace Services.SceneManagement
             
             if (scene.State == SceneReferenceState.Addressable)
             {
-                await LoadSceneFromBundle(scene.Path, progress)
-                    .ContinueWith(_ => _sceneIsLoadSubject.OnNext(Unit.Default));
+                await LoadSceneFromBundle(scene.Path, sceneGroup, progress);
             }
         }
 
         private async UniTask UnloadScene()
         {
-            if(_previousScene.IsValid() == false) return;
+            if(_previousScene.IsValid() == false) 
+                return;
             
             await Addressables.UnloadSceneAsync(_previousScene);
 
@@ -53,35 +55,69 @@ namespace Services.SceneManagement
 
             await Resources.UnloadUnusedAssets();
         }
-        
-        private async UniTask<bool> LoadSceneFromBundle(string sceneName, IProgress<float> progress)
-        {
-            AsyncOperationHandle<SceneInstance> sceneLoadOperation = Addressables.LoadSceneAsync(sceneName);
-            _previousScene = sceneLoadOperation;
-            
-            while (!sceneLoadOperation.IsDone)
-            {
-                progress.Report(sceneLoadOperation.PercentComplete);
-                await UniTask.WaitForSeconds(0.1f);
-            }
 
+        private async void UnloadInitialScene(TypeScene typeScene, Scene initialScene, SceneGroup sceneGroup)
+        {
+            var scene = sceneGroup.FindSceneByReference(typeScene);
+            
+            if (initialScene.isLoaded && scene.Name == initialScene.name)
+            {
+                await SceneManager.UnloadSceneAsync(initialScene);
+            }
+        }
+
+        private async UniTask<bool> LoadSceneFromBundle(
+            string sceneName,
+            SceneGroup sceneGroup,
+            IProgress<float> progress
+        )
+        {
+            var previousScene = SceneManager.GetActiveScene();
+            
+            var sceneLoadOperation = Addressables.LoadSceneAsync(
+                sceneName,
+                LoadSceneMode.Additive,
+                false
+            );
+            
+            _previousScene = sceneLoadOperation;
+
+            var fakeProgress = 0f;
+            
+            while (_sceneLoader.Progress.Value < 1 || !sceneLoadOperation.IsDone)
+            {
+                var target = Mathf.Clamp01(sceneLoadOperation.PercentComplete);
+                fakeProgress = Mathf.MoveTowards(fakeProgress, target, 0.01f);
+                progress.Report(fakeProgress);
+
+                await UniTask.Yield();
+            }
+            
             if (sceneLoadOperation.Status == AsyncOperationStatus.Failed)
             {
                 Debug.LogError("Failed to load scene: " + sceneName);
+                return false;
             }
 
             var sceneInstance = sceneLoadOperation.Result;
-            if (sceneInstance.Scene.IsValid())
+            if (!sceneInstance.Scene.IsValid())
             {
-                var loadedScene = SceneManager.GetSceneByPath(sceneInstance.Scene.path);
-
-                if (loadedScene.IsValid())
-                    SceneManager.SetActiveScene(loadedScene);
-            }
-            else
                 Debug.LogWarning("Invalid scene instance loaded.");
+                return false;
+            }
+            
+            await sceneInstance.ActivateAsync();
+            
+            SceneManager.SetActiveScene(sceneInstance.Scene);
 
-            await UniTask.Yield();
+            UnloadInitialScene(
+                TypeScene.InitialScene,
+                previousScene,
+                sceneGroup);
+            
+            _sceneLoader.IsLoading.Value = false;
+            _sceneIsLoadSubject.OnNext(Unit.Default);
+
             return true;
         }
     }

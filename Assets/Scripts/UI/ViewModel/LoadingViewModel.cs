@@ -15,7 +15,7 @@ namespace UI.ViewModel
         {
             Bind(_progressBinder);
             
-            _sceneLoader.FillAmount
+            _sceneLoader.Progress
                 .Subscribe(value => _progressBinder.Value = value)
                 .AddTo(Disposable);
         }
