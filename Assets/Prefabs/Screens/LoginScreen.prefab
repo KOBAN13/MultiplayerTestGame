@@ -2737,6 +2737,7 @@ GameObject:
   - component: {fileID: 6178141877714003489}
   - component: {fileID: 7343681149156965213}
   - component: {fileID: 279232748901538887}
+  - component: {fileID: 7640622140948089117}
   m_Layer: 5
   m_Name: LoginScreen
   m_TagString: Untagged
@@ -2828,6 +2829,18 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 55
+--- !u!114 &7640622140948089117
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7935833312392916422}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c2b401f11fa743619785eb586a3084a0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7963883179721723908
 GameObject:
   m_ObjectHideFlags: 0

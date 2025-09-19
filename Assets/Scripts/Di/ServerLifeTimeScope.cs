@@ -1,31 +1,45 @@
-﻿using Services;
+﻿using Factories;
+using Installer;
+using Services;
+using Services.Connections;
 using Sfs2X;
+using UnityEngine;
 using VContainer;
-using VContainer.Unity;
 
 namespace Di
 {
-    public class ServerLifeTimeScope : LifetimeScope
+    public class ServerLifeTimeScope : BaseLifeTimeScope
     {
+        [SerializeField] private MainMenuInstaller _mainMenuInstaller;
+        
         protected override void Configure(IContainerBuilder builder)
         {
-            ServerScope(builder);
+            Builder = builder;
+            
+            RegisterFactories();
+            RegisterServices();
+            ServerScope();
         }
         
-        private void ServerScope(IContainerBuilder builder)
+        private void RegisterFactories()
+        {
+            Register<ViewModelFactory>(Lifetime.Singleton);
+            Register<ViewsFactory>(Lifetime.Singleton);
+            Register<ScreensFactory>(Lifetime.Singleton);
+        }
+
+        private void RegisterServices()
+        {
+            Register<ScreenService>(Lifetime.Singleton);
+        }
+        
+        private void ServerScope()
         {
             var sfs = new SmartFox();
-            
-            builder
-                .RegisterInstance(sfs)
-                .AsImplementedInterfaces()
-                .AsSelf();
-            
-            builder
-                .Register<EncryptionService>(Lifetime.Singleton)
-                .WithParameter("SFSTestGameKey568")
-                .AsImplementedInterfaces()
-                .AsSelf();
+            RegisterInstance(_mainMenuInstaller);
+            RegisterInstance(sfs);
+            RegisterWithArgument<EncryptionService, string>(Lifetime.Singleton, "SFSTestGameKey568");
+            Register<ConnectionService>(Lifetime.Singleton);
         }
     }
 }

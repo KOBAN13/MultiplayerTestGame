@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using R3;
+using UnityEngine;
 
 namespace UI.Base
 {
@@ -20,6 +21,8 @@ namespace UI.Base
 
         public virtual void Dispose()
         {
+            Debug.LogWarning("Disposable");
+            
             Disposable.Dispose();
         }
     }

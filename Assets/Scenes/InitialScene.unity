@@ -382,7 +382,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   parentReference:
-    TypeName: 
+    TypeName: Di.RootLifeTimeScope
   autoRun: 1
   autoInjectGameObjects:
   - {fileID: 252153952}

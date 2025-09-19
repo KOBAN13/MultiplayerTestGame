@@ -1,7 +1,6 @@
 ﻿using System.Linq;
 using Factories;
 using Services;
-using Services.Interface;
 using Services.SceneManagement;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
@@ -38,17 +37,17 @@ namespace Di
 
         private void RegisterFactories()
         {
-            Register<ViewModelFactory>();
-            Register<ViewsFactory>();
-            Register<ScreensFactory>();
+            Register<ViewModelFactory>(Lifetime.Singleton);
+            Register<ViewsFactory>(Lifetime.Singleton);
+            Register<ScreensFactory>(Lifetime.Singleton);
         }
 
         private void RegisterServices()
         {
-            Register<SceneResources>();
-            Register<SceneService>();
+            Register<SceneResources>(Lifetime.Singleton);
+            Register<SceneService>(Lifetime.Singleton);
             RegisterInstance(_sceneLoader);
-            Register<ScreenService>();
+            Register<ScreenService>(Lifetime.Singleton);
         }
     }
 }

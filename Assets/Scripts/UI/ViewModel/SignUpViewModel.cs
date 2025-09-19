@@ -1,6 +1,6 @@
 ﻿namespace UI.ViewModel
 {
-    public class SignInViewModel : Base.ViewModel
+    public class SignUpViewModel : Base.ViewModel
     {
         public override void Initialize()
         {

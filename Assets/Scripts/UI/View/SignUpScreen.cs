@@ -3,7 +3,7 @@ using UI.ViewModel;
 
 namespace UI.View
 {
-    public class SignInScreen : Screen<SignInViewModel>
+    public class SignUpScreen : Screen<SignUpViewModel>
     {
         public override void Initialize()
         {

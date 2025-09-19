@@ -4,7 +4,6 @@ using Cysharp.Threading.Tasks;
 using Factories;
 using Services.Interface;
 using UI.Base;
-using UI.View;
 using VContainer;
 
 namespace Services
@@ -64,6 +63,11 @@ namespace Services
             {
                 _loadingScreen.Close();
             }
+        }
+
+        public void CloseScreen<TScreen>() where TScreen : View
+        {
+            
         }
 
         public void Close()

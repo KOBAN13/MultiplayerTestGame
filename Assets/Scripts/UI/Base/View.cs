@@ -13,7 +13,7 @@ namespace UI.Base
         private ViewBinder[] _viewBinders;
         public TViewModel ViewModel { get; private set; }
         
-        protected void Bind(params ViewBinder[] viewBinders)
+        protected void Bind( params ViewBinder[] viewBinders)
         {
             ViewModel = _viewModelFactory.Create<TViewModel>(viewBinders);
             foreach (var viewBinder in viewBinders)

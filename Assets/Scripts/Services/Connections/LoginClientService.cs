@@ -6,16 +6,16 @@ using Sfs2X.Entities.Data;
 using Sfs2X.Requests;
 using UnityEngine;
 
-namespace ClientsScripts
+namespace Services.Connections
 {
-    public class LoginClient
+    public class LoginClientService
     {
         public User User { get; private set; }
 
         private readonly SmartFox _sfs;
         private readonly GameServerData _gameServerData;
         
-        public LoginClient(SmartFox sfs, GameServerData gameServerData)
+        public LoginClientService(SmartFox sfs, GameServerData gameServerData)
         {
             _sfs = sfs;
             _gameServerData = gameServerData;
@@ -35,6 +35,7 @@ namespace ClientsScripts
         private void OnLoginSuccess(BaseEvent evt)
         {
             User = (User)evt.Params["user"];
+            
             Debug.Log($"Login successful; username is {User.Name}");
 
             var parameters = SFSObject.NewInstance();

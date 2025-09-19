@@ -6,10 +6,15 @@ namespace Di
     public class BaseLifeTimeScope : LifetimeScope
     {
         protected IContainerBuilder Builder;
-        
-        protected void Register<T>() where T : class
+
+        protected void RegisterWithArgument<T, TParam>(Lifetime lifetime, TParam param) where T : class
         {
-            Builder.Register<T>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
+            Builder.Register<T>(lifetime).AsImplementedInterfaces().WithParameter(param).AsSelf();
+        }
+        
+        protected void Register<T>(Lifetime lifetime) where T : class
+        {
+            Builder.Register<T>(lifetime).AsImplementedInterfaces().AsSelf();
         }
         
         protected void RegisterInstance<T>(T instance) where T : class

@@ -2,6 +2,7 @@
 {
     public static class SFSResponseHelper
     {
+        public const string SERVER_URL = "https://apisfs.ru:9443/getSfsConfig";
         public const string ERROR = "error";
         public const string OK = "ok";
         public const string RESTORE_RESULT = "restoreResult";

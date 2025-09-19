@@ -72,3 +72,17 @@ MonoBehaviour:
       m_SubObjectGUID: 
       m_SubObjectType: 
       m_EditorAssetChanged: 0
+  - type: UI.View.SignUpScreen
+    asset:
+      m_AssetGUID: 08879641ff7515148a65241eb8c5c07b
+      m_SubObjectName: 
+      m_SubObjectGUID: 
+      m_SubObjectType: 
+      m_EditorAssetChanged: 1
+  - type: UI.View.NoteScreen
+    asset:
+      m_AssetGUID: ddc2fffdbb3a44d088b6d792262507e8
+      m_SubObjectName: 
+      m_SubObjectGUID: 
+      m_SubObjectType: 
+      m_EditorAssetChanged: 1

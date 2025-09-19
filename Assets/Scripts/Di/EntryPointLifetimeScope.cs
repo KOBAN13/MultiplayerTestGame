@@ -1,4 +1,5 @@
-﻿using Installer;
+﻿using Factories;
+using Installer;
 using UnityEngine;
 using VContainer;
 
@@ -11,12 +12,12 @@ namespace Di
         {
             Builder = builder;
             
-            BuildEntryPoint(builder);
+            BuildEntryPoint();
         }
 
-        private void BuildEntryPoint(IContainerBuilder builder)
+        private void BuildEntryPoint()
         {
-            builder.RegisterInstance(_installer).AsImplementedInterfaces().AsSelf();
+            RegisterInstance(_installer);
         }
     }
 }
