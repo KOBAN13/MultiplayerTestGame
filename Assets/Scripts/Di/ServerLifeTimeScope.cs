@@ -40,6 +40,7 @@ namespace Di
             RegisterInstance(sfs);
             RegisterWithArgument<EncryptionService, string>(Lifetime.Singleton, "SFSTestGameKey568");
             Register<ConnectionService>(Lifetime.Singleton);
+            Register<LoginClientService>(Lifetime.Singleton);
         }
     }
 }

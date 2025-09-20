@@ -1,54 +1,54 @@
 ﻿using Configs;
+using Helpers;
+using R3;
+using Services.Interface;
 using Sfs2X;
 using Sfs2X.Core;
 using Sfs2X.Entities;
-using Sfs2X.Entities.Data;
 using Sfs2X.Requests;
-using UnityEngine;
+using Unity.VisualScripting;
+using VContainer;
 
 namespace Services.Connections
 {
-    public class LoginClientService
+    public class LoginClientService : ILoginClientService, IInitializable
     {
-        public User User { get; private set; }
+        private User _user;
 
         private readonly SmartFox _sfs;
-        private readonly GameServerData _gameServerData;
+        private readonly ReactiveProperty<string> _loginErrorRequest = new();
         
-        public LoginClientService(SmartFox sfs, GameServerData gameServerData)
+        public ReadOnlyReactiveProperty<string> LoginErrorRequest => _loginErrorRequest;
+        
+        [Inject]
+        public LoginClientService(SmartFox sfs)
         {
             _sfs = sfs;
-            _gameServerData = gameServerData;
+        }
+        
+        public void Initialize()
+        {
+            _sfs.AddEventListener(SFSResponseHelper.LOGIN_RESULT, OnLoginResult);
         }
 
-        public void SubscribeListeners()
+        public void Login(string login, string password)
         {
-            _sfs.AddEventListener(SFSEvent.LOGIN, OnLoginSuccess);
-            _sfs.AddEventListener(SFSEvent.LOGIN_ERROR, OnLoginError);
+            _sfs.Send(new LoginRequest(login, password));
         }
-
-        public void Login()
+        
+        private void OnLoginResult(BaseEvent evt)
         {
-            _sfs.Send(new LoginRequest("", "", _gameServerData.Zone));
-        }
+            var status = (bool)evt.Params[SFSResponseHelper.OK];
 
-        private void OnLoginSuccess(BaseEvent evt)
-        {
-            User = (User)evt.Params["user"];
-            
-            Debug.Log($"Login successful; username is {User.Name}");
-
-            var parameters = SFSObject.NewInstance();
-            
-            parameters.PutInt("n1", 5);
-            parameters.PutInt("n2", 6);
-            
-            _sfs.Send(new ExtensionRequest("math", parameters));
-        }
-
-        private void OnLoginError(BaseEvent evt)
-        {
-            Debug.LogWarning($"Login failed: {(string)evt.Params["errorMessage"]}" );
+            if (status)
+            {
+                var userName = (string)evt.Params[SFSResponseHelper.USER_NAME];
+                _user = (User)evt.Params["user"];
+            }
+            else
+            {
+                var errorMessage = (string)evt.Params[SFSResponseHelper.ERROR];
+            }
         }
     }
 }

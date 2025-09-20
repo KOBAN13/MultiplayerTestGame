@@ -21,7 +21,6 @@ namespace Services.Connections
         private SmartFox _sfs;
         private IScreenService _screenService;
         private IEncryptionService _encryptionService;
-        private LoginClientService _loginClientService;
         private readonly ReactiveProperty<string> _connectionErrorDescription = new();
 
         private IDisposable _disposable;
@@ -78,9 +77,6 @@ namespace Services.Connections
                 Zone = gameServerData.Zone
             };
             
-            _loginClientService = new LoginClientService(_sfs, gameServerData);
-
-            _loginClientService.SubscribeListeners();
             _sfs.Connect(configData);
         }
 
@@ -131,8 +127,6 @@ namespace Services.Connections
             {
                 Debug.Log("Connection established successfully");
                 Debug.Log("SFS2X API version: " + _sfs.Version);
-                
-                _loginClientService.Login();
             }
             else
             {

@@ -13,7 +13,7 @@ namespace Services
         [Inject] private readonly ScreensFactory _screensFactory;
         
         private readonly Dictionary<Type, View> _screensByType = new();
-        private readonly Stack<View> _screensStack = new();
+        private readonly LinkedList<View> _screens = new();
         
         public View CurrentScreen { get; private set; }
         private View _loadingScreen;
@@ -23,7 +23,7 @@ namespace Services
             if (_screensByType.TryGetValue(typeof(TScreen), out var screen))
             {
                 screen.Open();
-                _screensStack.Push(screen);
+                _screens.AddLast(screen);
                 CurrentScreen = screen;
                 return (TScreen)screen;
             }
@@ -33,7 +33,7 @@ namespace Services
             
             newScreen.Open();
             _screensByType.Add(typeof(TScreen), newScreen);
-            _screensStack.Push(newScreen);
+            _screens.AddLast(newScreen);
             CurrentScreen = newScreen;
     
             return newScreen;
@@ -67,19 +67,30 @@ namespace Services
 
         public void CloseScreen<TScreen>() where TScreen : View
         {
-            
+            if (_screensByType.TryGetValue(typeof(TScreen), out var screen))
+            {
+                _screens.Remove(screen);
+                screen.Close();
+                screen.gameObject.SetActive(false);
+                
+                if (_screens.Count > 0)
+                    CurrentScreen = _screens.Last.Value;
+            }
         }
 
         public void Close()
         {
-            if (_screensStack.TryPop(out var screen))
+            var screen = _screens.Last.Value;
+
+            if (screen == null) 
+                return;
+            
+            _screens.RemoveLast();
+            screen.Close();
+            screen.gameObject.SetActive(false);
+            if (_screens.Count > 0)
             {
-                screen.Close();
-                screen.gameObject.SetActive(false);
-                if (_screensStack.Count > 0)
-                {
-                    CurrentScreen = _screensStack.Peek();
-                }
+                CurrentScreen = screen;
             }
         }
     }
